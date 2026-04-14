@@ -59,3 +59,4 @@
  GET /about 200 in 62ms (next.js: 2ms, application-code: 59ms)
  GET /about 200 in 37ms (next.js: 4ms, application-code: 33ms)
  GET /about 200 in 26ms (next.js: 3ms, application-code: 23ms)
+✓ Compiled in 28ms

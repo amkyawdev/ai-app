@@ -6,7 +6,6 @@ export const metadata: Metadata = {
   description: "High-performance AI assistant with real-time streaming and glassmorphism UI",
   icons: {
     icon: "/favicon.ico",
-    appleTouchIcon: "/favicon.ico",
   },
 };
 
