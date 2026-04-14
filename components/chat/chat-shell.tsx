@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { Send, Plus, Loader2, Trash2 } from 'lucide-react';
+import { Send, Plus, Loader2, Trash2, Menu } from 'lucide-react';
 import { ChatMessage } from './chat-message';
 
 type Message = {
@@ -60,7 +60,7 @@ export default function ChatShell() {
         }),
       });
 
-      if (!response.ok) throw new Error('Failed to get response');
+      if (!response.ok) throw new Error('Failed');
 
       const reader = response.body?.getReader();
       if (!reader) throw new Error('No reader');
@@ -84,9 +84,7 @@ export default function ChatShell() {
         assistantContent += chunk;
         setMessages(prev => 
           prev.map((m, i) => 
-            m.id === assistantMessage.id 
-              ? { ...m, content: assistantContent } 
-              : m
+            m.id === assistantMessage.id ? { ...m, content: assistantContent } : m
           )
         );
       }
@@ -122,7 +120,7 @@ export default function ChatShell() {
         <div className="p-4 h-full flex flex-col w-72">
           <button
             onClick={newChat}
-            className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-gradient-to-r from-cyan/10 to-violet/10 text-cyan font-medium hover:from-cyan/20 hover:to-violet/20 transition-all"
+            className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-gradient-to-r from-[#00f2ff]/10 to-[#8b5cf6]/10 text-[#00f2ff] font-medium hover:from-[#00f2ff]/20 hover:to-[#8b5cf6]/20 transition-all"
           >
             <Plus size={18} />
             <span>New Chat</span>
@@ -130,7 +128,7 @@ export default function ChatShell() {
 
           <div className="mt-6 flex-1 overflow-y-auto space-y-2">
             {history.length === 0 ? (
-              <p className="text-sm text-zinc-500">No conversations yet</p>
+              <p className="text-sm text-[#a1a1aa]">No conversations yet</p>
             ) : (
               history.map(chat => (
                 <div
@@ -141,7 +139,7 @@ export default function ChatShell() {
                   }}
                   className="flex items-center justify-between p-3 rounded-lg bg-white/5 hover:bg-white/10 cursor-pointer transition-colors"
                 >
-                  <span className="text-sm text-zinc-300 truncate">{chat.title}</span>
+                  <span className="text-sm text-[#a1a1aa] truncate">{chat.title}</span>
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
@@ -149,7 +147,7 @@ export default function ChatShell() {
                     }}
                     className="p-1 hover:bg-white/10 rounded"
                   >
-                    <Trash2 size={14} className="text-zinc-500" />
+                    <Trash2 size={14} className="text-[#a1a1aa]" />
                   </button>
                 </div>
               ))
@@ -161,11 +159,9 @@ export default function ChatShell() {
       {/* Sidebar Toggle */}
       <button
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-        className="absolute left-4 top-20 z-10 p-2 glass rounded-lg hover:bg-white/10"
+        className="absolute left-4 top-20 z-10 p-2 glass rounded-lg hover:bg-white/10 transition-colors"
       >
-        <svg className={`w-4 h-4 transition-transform ${isSidebarOpen ? '' : 'rotate-180'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-        </svg>
+        <Menu className={`w-4 h-4 text-white transition-transform ${isSidebarOpen ? '' : 'rotate-180'}`} />
       </button>
 
       {/* Main Chat Area */}
@@ -174,13 +170,13 @@ export default function ChatShell() {
         <div className="flex-1 overflow-y-auto p-4 sm:p-6">
           {messages.length === 0 && (
             <div className="flex flex-col items-center justify-center h-full text-center">
-              <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-cyan to-violet">
+              <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-[#00f2ff] to-[#8b5cf6]">
                 <svg className="h-10 w-10 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
                 </svg>
               </div>
               <h2 className="mb-2 text-2xl font-bold text-white">Welcome to Amkyaw AI</h2>
-              <p className="text-zinc-400 max-w-md">
+              <p className="text-[#a1a1aa] max-w-md">
                 Start a conversation with your AI assistant. Ask questions, get help, or simply chat.
               </p>
             </div>
@@ -192,8 +188,8 @@ export default function ChatShell() {
 
           {isLoading && messages.length > 0 && (
             <div className="flex items-center gap-3">
-              <Loader2 className="h-5 w-5 animate-spin text-cyan" />
-              <span className="text-sm text-zinc-500">Thinking...</span>
+              <Loader2 className="h-5 w-5 animate-spin text-[#00f2ff]" />
+              <span className="text-sm text-[#a1a1aa]">Thinking...</span>
             </div>
           )}
 
@@ -209,7 +205,7 @@ export default function ChatShell() {
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyPress}
                 placeholder="Type your message..."
-                className="flex-1 bg-transparent text-white placeholder-zinc-500 resize-none focus:outline-none min-h-[48px] max-h-32"
+                className="flex-1 bg-transparent text-white placeholder-[#a1a1aa] resize-none focus:outline-none min-h-[48px] max-h-32"
                 rows={1}
               />
               <button
@@ -217,14 +213,14 @@ export default function ChatShell() {
                 disabled={!input.trim() || isLoading}
                 className={`p-3 rounded-xl transition-all ${
                   input.trim() && !isLoading
-                    ? 'bg-gradient-to-r from-cyan to-cyan/80 text-black hover:shadow-[0_0_20px_rgba(0,242,255,0.4)]'
-                    : 'bg-white/10 text-zinc-500 cursor-not-allowed'
+                    ? 'bg-gradient-to-r from-[#00f2ff] to-[#00d4e0] text-black hover:shadow-[0_0_20px_rgba(0,242,255,0.4)]'
+                    : 'bg-white/10 text-[#a1a1aa] cursor-not-allowed'
                 }`}
               >
                 <Send size={20} />
               </button>
             </div>
-            <p className="text-center text-xs text-zinc-600 mt-2">
+            <p className="text-center text-xs text-[#a1a1aa] mt-2">
               AI can make mistakes. Verify important information.
             </p>
           </div>
