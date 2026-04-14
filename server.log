@@ -1,0 +1,264 @@
+
+> ai-app@0.1.0 dev
+> next dev
+
+▲ Next.js 16.2.3 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://10.2.38.140:3000
+- Environments: .env.local
+✓ Ready in 336ms
+
+○ Compiling / ...
+⨯ ./app/globals.css:1038:8
+Parsing CSS source code failed
+  [90m1036 |[0m   }
+  [90m1037 |[0m }
+[31m[1m>[0m [90m1038 |[0m @[36mimport[0m url([32m'https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap'[0m);
+  [90m     |[0m        [31m[1m^[0m
+  [90m1039 |[0m :root {
+  [90m1040 |[0m   --background: #[35m0[0ma0a0a;
+  [90m1041 |[0m   --foreground: #ffffff;
+
+@import rules must precede all rules aside from @charset and @layer statements
+
+Generated code of PostCSS transform of file content of app/globals.css:
+./app/globals.css:1038:8
+  [90m1036 |[0m   }
+  [90m1037 |[0m }
+[31m[1m>[0m [90m1038 |[0m @[36mimport[0m url([32m'https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap'[0m);
+  [90m     |[0m        [31m[1m^[0m
+  [90m1039 |[0m :root {
+  [90m1040 |[0m   --background: #[35m0[0ma0a0a;
+  [90m1041 |[0m   --foreground: #ffffff;
+
+Import trace:
+  Client Component Browser:
+    ./app/globals.css [Client Component Browser]
+    ./app/layout.tsx [Server Component]
+
+
+ GET / 500 in 4.7s (next.js: 4.6s, application-code: 125ms)
+[browser] Uncaught Error: ./app/globals.css:1038:8
+Parsing CSS source code failed
+  1036 |   }
+  1037 | }
+> 1038 | @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+       |        ^
+  1039 | :root {
+  1040 |   --background: #0a0a0a;
+  1041 |   --foreground: #ffffff;
+
+@import rules must precede all rules aside from @charset and @layer statements
+
+Generated code of PostCSS transform of file content of app/globals.css:
+./app/globals.css:1038:8
+  1036 |   }
+  1037 | }
+> 1038 | @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+       |        ^
+  1039 | :root {
+  1040 |   --background: #0a0a0a;
+  1041 |   --foreground: #ffffff;
+
+Import trace:
+  Client Component Browser:
+    ./app/globals.css [Client Component Browser]
+    ./app/layout.tsx [Server Component]
+
+
+    at <unknown> (Error: ./app/globals.css:1038:8)
+    at <unknown> (./app/globals.css:1038:8)
+    at <unknown> (Error: (./app/globals.css:1038:8)
+    at <unknown> (./app/globals.css:1038:8)
+[browser] ./app/globals.css:1038:8
+Parsing CSS source code failed
+  1036 |   }
+  1037 | }
+> 1038 | @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+       |        ^
+  1039 | :root {
+  1040 |   --background: #0a0a0a;
+  1041 |   --foreground: #ffffff;
+
+@import rules must precede all rules aside from @charset and @layer statements
+
+Generated code of PostCSS transform of file content of app/globals.css:
+./app/globals.css:1038:8
+  1036 |   }
+  1037 | }
+> 1038 | @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+       |        ^
+  1039 | :root {
+  1040 |   --background: #0a0a0a;
+  1041 |   --foreground: #ffffff;
+
+Import trace:
+  Client Component Browser:
+    ./app/globals.css [Client Component Browser]
+    ./app/layout.tsx [Server Component] 
+[browser] ./app/globals.css:1038:8
+Parsing CSS source code failed
+  1036 |   }
+  1037 | }
+> 1038 | @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+       |        ^
+  1039 | :root {
+  1040 |   --background: #0a0a0a;
+  1041 |   --foreground: #ffffff;
+
+@import rules must precede all rules aside from @charset and @layer statements
+
+Generated code of PostCSS transform of file content of app/globals.css:
+./app/globals.css:1038:8
+  1036 |   }
+  1037 | }
+> 1038 | @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+       |        ^
+  1039 | :root {
+  1040 |   --background: #0a0a0a;
+  1041 |   --foreground: #ffffff;
+
+Import trace:
+  Client Component Browser:
+    ./app/globals.css [Client Component Browser]
+    ./app/layout.tsx [Server Component] 
+[browser] ./app/globals.css:1038:8
+Parsing CSS source code failed
+  1036 |   }
+  1037 | }
+> 1038 | @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+       |        ^
+  1039 | :root {
+  1040 |   --background: #0a0a0a;
+  1041 |   --foreground: #ffffff;
+
+@import rules must precede all rules aside from @charset and @layer statements
+
+Generated code of PostCSS transform of file content of app/globals.css:
+./app/globals.css:1038:8
+  1036 |   }
+  1037 | }
+> 1038 | @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+       |        ^
+  1039 | :root {
+  1040 |   --background: #0a0a0a;
+  1041 |   --foreground: #ffffff;
+
+Import trace:
+  Client Component Browser:
+    ./app/globals.css [Client Component Browser]
+    ./app/layout.tsx [Server Component] 
+ GET / 200 in 466ms (next.js: 160ms, application-code: 306ms)
+[browser] THREE.WebGLRenderer: A WebGL context could not be created. Reason:  Could not create a WebGL context, VENDOR = 0xffff, DEVICE = 0xffff, Sandboxed = no, Optimus = no, AMD switchable = no, Reset notification strategy = 0x0000, ErrorMessage = BindToCurrentSequence failed: . 
+    at ParticlesBackground.useEffect (components/ParticlesBackground.tsx:22:22)
+  20 |     camera.position.z = 30;
+  21 |
+> 22 |     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+     |                      ^
+  23 |     renderer.setSize(width, height);
+  24 |     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  25 |     container.appendChild(renderer.domElement); (components/ParticlesBackground.tsx:22:22)
+[browser] THREE.WebGLRenderer: A WebGL context could not be created. Reason:  Could not create a WebGL context, VENDOR = 0xffff, DEVICE = 0xffff, Sandboxed = no, Optimus = no, AMD switchable = no, Reset notification strategy = 0x0000, ErrorMessage = BindToCurrentSequence failed: . 
+    at ParticlesBackground.useEffect (components/ParticlesBackground.tsx:22:22)
+  20 |     camera.position.z = 30;
+  21 |
+> 22 |     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+     |                      ^
+  23 |     renderer.setSize(width, height);
+  24 |     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  25 |     container.appendChild(renderer.domElement); (components/ParticlesBackground.tsx:22:22)
+[browser] THREE.WebGLRenderer: Error creating WebGL context. 
+    at ParticlesBackground.useEffect (components/ParticlesBackground.tsx:22:22)
+  20 |     camera.position.z = 30;
+  21 |
+> 22 |     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+     |                      ^
+  23 |     renderer.setSize(width, height);
+  24 |     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  25 |     container.appendChild(renderer.domElement); (components/ParticlesBackground.tsx:22:22)
+[browser] Uncaught Error: Error creating WebGL context.
+    at ParticlesBackground.useEffect (components/ParticlesBackground.tsx:22:22)
+    at Home (app/page.tsx:11:7)
+  20 |     camera.position.z = 30;
+  21 |
+> 22 |     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+     |                      ^
+  23 |     renderer.setSize(width, height);
+  24 |     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  25 |     container.appendChild(renderer.domElement);
+ GET / 200 in 52ms (next.js: 6ms, application-code: 46ms)
+[browser] THREE.WebGLRenderer: A WebGL context could not be created. Reason:  Could not create a WebGL context, VENDOR = 0xffff, DEVICE = 0xffff, Sandboxed = no, Optimus = no, AMD switchable = no, Reset notification strategy = 0x0000, ErrorMessage = BindToCurrentSequence failed: . 
+    at ParticlesBackground.useEffect (components/ParticlesBackground.tsx:22:22)
+  20 |     camera.position.z = 30;
+  21 |
+> 22 |     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+     |                      ^
+  23 |     renderer.setSize(width, height);
+  24 |     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  25 |     container.appendChild(renderer.domElement); (components/ParticlesBackground.tsx:22:22)
+[browser] THREE.WebGLRenderer: A WebGL context could not be created. Reason:  Could not create a WebGL context, VENDOR = 0xffff, DEVICE = 0xffff, Sandboxed = no, Optimus = no, AMD switchable = no, Reset notification strategy = 0x0000, ErrorMessage = BindToCurrentSequence failed: . 
+    at ParticlesBackground.useEffect (components/ParticlesBackground.tsx:22:22)
+  20 |     camera.position.z = 30;
+  21 |
+> 22 |     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+     |                      ^
+  23 |     renderer.setSize(width, height);
+  24 |     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  25 |     container.appendChild(renderer.domElement); (components/ParticlesBackground.tsx:22:22)
+[browser] THREE.WebGLRenderer: Error creating WebGL context. 
+    at ParticlesBackground.useEffect (components/ParticlesBackground.tsx:22:22)
+  20 |     camera.position.z = 30;
+  21 |
+> 22 |     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+     |                      ^
+  23 |     renderer.setSize(width, height);
+  24 |     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  25 |     container.appendChild(renderer.domElement); (components/ParticlesBackground.tsx:22:22)
+[browser] Uncaught Error: Error creating WebGL context.
+    at ParticlesBackground.useEffect (components/ParticlesBackground.tsx:22:22)
+    at Home (app/page.tsx:11:7)
+  20 |     camera.position.z = 30;
+  21 |
+> 22 |     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+     |                      ^
+  23 |     renderer.setSize(width, height);
+  24 |     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  25 |     container.appendChild(renderer.domElement);
+ GET / 200 in 50ms (next.js: 3ms, application-code: 47ms)
+[browser] THREE.WebGLRenderer: A WebGL context could not be created. Reason:  Could not create a WebGL context, VENDOR = 0xffff, DEVICE = 0xffff, Sandboxed = no, Optimus = no, AMD switchable = no, Reset notification strategy = 0x0000, ErrorMessage = BindToCurrentSequence failed: . 
+    at ParticlesBackground.useEffect (components/ParticlesBackground.tsx:22:22)
+  20 |     camera.position.z = 30;
+  21 |
+> 22 |     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+     |                      ^
+  23 |     renderer.setSize(width, height);
+  24 |     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  25 |     container.appendChild(renderer.domElement); (components/ParticlesBackground.tsx:22:22)
+[browser] THREE.WebGLRenderer: A WebGL context could not be created. Reason:  Could not create a WebGL context, VENDOR = 0xffff, DEVICE = 0xffff, Sandboxed = no, Optimus = no, AMD switchable = no, Reset notification strategy = 0x0000, ErrorMessage = BindToCurrentSequence failed: . 
+    at ParticlesBackground.useEffect (components/ParticlesBackground.tsx:22:22)
+  20 |     camera.position.z = 30;
+  21 |
+> 22 |     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+     |                      ^
+  23 |     renderer.setSize(width, height);
+  24 |     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  25 |     container.appendChild(renderer.domElement); (components/ParticlesBackground.tsx:22:22)
+[browser] THREE.WebGLRenderer: Error creating WebGL context. 
+    at ParticlesBackground.useEffect (components/ParticlesBackground.tsx:22:22)
+  20 |     camera.position.z = 30;
+  21 |
+> 22 |     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+     |                      ^
+  23 |     renderer.setSize(width, height);
+  24 |     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  25 |     container.appendChild(renderer.domElement); (components/ParticlesBackground.tsx:22:22)
+[browser] Uncaught Error: Error creating WebGL context.
+    at ParticlesBackground.useEffect (components/ParticlesBackground.tsx:22:22)
+    at Home (app/page.tsx:11:7)
+  20 |     camera.position.z = 30;
+  21 |
+> 22 |     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+     |                      ^
+  23 |     renderer.setSize(width, height);
+  24 |     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  25 |     container.appendChild(renderer.domElement);
