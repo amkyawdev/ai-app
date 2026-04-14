@@ -4,6 +4,10 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Amkyaw AI - Smart AI Assistant",
   description: "High-performance AI assistant with real-time streaming and glassmorphism UI",
+  icons: {
+    icon: "/favicon.ico",
+    appleTouchIcon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({
@@ -14,6 +18,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full antialiased">
       <head>
+        <link rel="icon" href="/favicon.ico" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />

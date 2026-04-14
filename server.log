@@ -55,3 +55,7 @@
  GET /chat 200 in 2.4s (next.js: 1951ms, application-code: 432ms)
  GET /docs 200 in 541ms (next.js: 488ms, application-code: 54ms)
  GET /about 200 in 527ms (next.js: 477ms, application-code: 49ms)
+ GET /about 200 in 95ms (next.js: 6ms, application-code: 89ms)
+ GET /about 200 in 62ms (next.js: 2ms, application-code: 59ms)
+ GET /about 200 in 37ms (next.js: 4ms, application-code: 33ms)
+ GET /about 200 in 26ms (next.js: 3ms, application-code: 23ms)
