@@ -180,7 +180,7 @@ export function ChatShell() {
         <button
           type="button"
           onClick={handleNewThread}
-          className="mb-4 flex w-full items-center justify-center gap-2 rounded-2xl border border-cyan/30 bg-cyan/10 px-4 py-3 text-sm font-medium text-white transition hover:bg-cyan/20"
+          className="mb-4 flex w-full items-center justify-center gap-2 rounded-2xl border border-cyan-30 bg-cyan-10 px-4 py-3 text-sm font-medium text-white transition hover:bg-cyan-20"
         >
           <MessageSquarePlus className="h-4 w-4" />
           New chat
@@ -194,7 +194,7 @@ export function ChatShell() {
               className={cn(
                 'w-full rounded-2xl border px-4 py-3 text-left transition',
                 thread.id === activeThreadId
-                  ? 'border-cyan/30 bg-white-10 text-white'
+                  ? 'border-cyan-30 bg-white-10 text-white'
                   : 'border-white-10 bg-white-5 text-slate-300 hover:bg-white-10',
               )}
             >
@@ -236,7 +236,7 @@ export function ChatShell() {
             <button
               type="submit"
               disabled={isStreaming}
-              className="inline-flex h-12 items-center justify-center gap-2 rounded-2xl border border-cyan/30 bg-cyan/10 px-5 text-sm font-medium text-white transition hover:bg-cyan/20 disabled:cursor-not-allowed disabled:opacity-60"
+              className="inline-flex h-12 items-center justify-center gap-2 rounded-2xl border border-cyan-30 bg-cyan-10 px-5 text-sm font-medium text-white transition hover:bg-cyan-20 disabled:cursor-not-allowed disabled:opacity-60"
             >
               {isStreaming ? <Loader2 className="h-4 w-4 animate-spin" /> : <SendHorizonal className="h-4 w-4" />}
               {isStreaming ? 'Streaming...' : 'Send'}

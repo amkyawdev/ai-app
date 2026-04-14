@@ -10,7 +10,7 @@ export default function HomePage() {
         <ParticleField />
         <div className="relative grid items-center gap-10 lg:grid-cols-[1.2fr_0.8fr]">
           <div className="max-w-3xl">
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-cyan/20 bg-cyan/10 px-4 py-2 text-sm text-cyan">
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-cyan-20 bg-cyan-10 px-4 py-2 text-sm text-cyan">
               <Gauge className="h-4 w-4" />
               Groq + Llama 4 Scout • Premium realtime UX
             </div>
@@ -38,7 +38,7 @@ export default function HomePage() {
                 <p className="text-sm text-slate-400">Performance Snapshot</p>
                 <h2 className="mt-1 text-2xl font-semibold text-white">Why it feels fast</h2>
               </div>
-              <div className="rounded-2xl border border-violet/20 bg-violet/10 p-3 text-violet">
+              <div className="rounded-2xl border border-violet-20 bg-violet-10 p-3 text-violet">
                 <Cpu className="h-5 w-5" />
               </div>
             </div>
@@ -48,13 +48,13 @@ export default function HomePage() {
                 { label: 'Context window handling', value: 'Trimmed + stable' },
                 { label: 'Response formatting', value: 'Markdown + code' },
               ].map((metric) => (
-                <div key={metric.label} className="rounded-2xl border border-white-10 bg-black/20 p-4">
+                <div key={metric.label} className="rounded-2xl border border-white-10 bg-black-20 p-4">
                   <p className="text-sm text-slate-400">{metric.label}</p>
                   <p className="mt-2 text-lg font-medium text-white">{metric.value}</p>
                 </div>
               ))}
             </div>
-            <div className="mt-8 rounded-2xl border border-cyan/20 bg-cyan/10 p-4 text-sm text-slate-200">
+            <div className="mt-8 rounded-2xl border border-cyan-20 bg-cyan-10 p-4 text-sm text-slate-200">
               <div className="flex items-center gap-2 text-cyan">
                 <ShieldCheck className="h-4 w-4" />
                 Prompt + retrieval guardrails built in

@@ -18,7 +18,7 @@ export default function AboutPage() {
           const Icon = pillar.icon;
           return (
             <div key={pillar.title} className="rounded-[2rem] border border-white-10 bg-white-5 p-6 shadow-glow backdrop-blur-xl">
-              <div className="inline-flex rounded-2xl border border-cyan/20 bg-cyan/10 p-3 text-cyan">
+              <div className="inline-flex rounded-2xl border border-cyan-20 bg-cyan-10 p-3 text-cyan">
                 <Icon className="h-5 w-5" />
               </div>
               <h2 className="mt-5 text-xl font-semibold text-white">{pillar.title}</h2>
@@ -40,7 +40,7 @@ export default function AboutPage() {
           <p className="text-sm text-slate-400">Vision Grid</p>
           <div className="mt-5 grid grid-cols-2 gap-3 text-sm text-slate-200">
             {['Realtime UX', 'Flexible RAG', 'Prompt Discipline', 'Scalable Design'].map((item) => (
-              <div key={item} className="rounded-2xl border border-white-10 bg-black/20 px-4 py-6 text-center">
+              <div key={item} className="rounded-2xl border border-white-10 bg-black-20 px-4 py-6 text-center">
                 {item}
               </div>
             ))}
