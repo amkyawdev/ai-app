@@ -1,122 +1,83 @@
-'use client';
+import { ArrowRight, Cpu, Gauge, ShieldCheck } from 'lucide-react';
+import { ButtonLink } from '@/components/ui/button-link';
+import { ParticleField } from '@/components/particle-field';
+import { VALUE_PROPS } from '@/lib/constants';
 
-import Link from 'next/link';
-import { motion } from 'framer-motion';
-import ParticlesBackground from '@/components/ParticlesBackground';
-import { Sparkles, ArrowRight, Zap, Brain, Shield } from 'lucide-react';
-
-export default function Home() {
+export default function HomePage() {
   return (
-    <div className="min-h-screen relative overflow-hidden">
-      <ParticlesBackground />
-      
-      {/* Navbar placeholder - we render it in layout but position needs adjustment */}
-      <div className="relative z-10">
-        <nav className="flex md:hidden fixed top-4 left-4 z-50">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#00f2ff] to-[#8b5cf6] flex items-center justify-center">
-              <span className="text-black font-bold text-sm">A</span>
+    <div className="space-y-10">
+      <section className="relative overflow-hidden rounded-[2.5rem] border border-white-10 px-6 py-16 shadow-glow sm:px-10 lg:px-14">
+        <ParticleField />
+        <div className="relative grid items-center gap-10 lg:grid-cols-[1.2fr_0.8fr]">
+          <div className="max-w-3xl">
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-cyan/20 bg-cyan/10 px-4 py-2 text-sm text-cyan">
+              <Gauge className="h-4 w-4" />
+              Groq + Llama 4 Scout • Premium realtime UX
             </div>
-            <span className="font-['Outfit'] font-bold text-xl text-white">Amkyaw AI</span>
+            <h1 className="text-4xl font-semibold leading-tight text-white sm:text-5xl lg:text-6xl">
+              Build faster conversations with <span className="text-cyan">Amkyaw AI</span>.
+            </h1>
+            <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-300">
+              A dark, glassmorphism AI interface engineered for instant feel, live token streaming,
+              and high-trust interaction design on top of Groq inference.
+            </p>
+            <div className="mt-8 flex flex-wrap items-center gap-4">
+              <ButtonLink href="/chat">
+                Get Started
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </ButtonLink>
+              <ButtonLink href="/docs" className="border-white/20 bg-white-5 text-slate-200 hover:bg-white-10">
+                View Docs
+              </ButtonLink>
+            </div>
           </div>
-        </nav>
-      </div>
 
-      <main className="relative z-10 min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8 pt-16 md:pt-0">
-        <div className="max-w-4xl mx-auto text-center">
-          {/* Hero Badge */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-8"
-          >
-            <Sparkles className="w-4 h-4 text-[#00f2ff]" />
-            <span className="text-sm text-[#a1a1aa]">Powered by Groq & llama-4-scout-17b</span>
-          </motion.div>
-
-          {/* Main Heading */}
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="font-['Outfit'] text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight"
-          >
-            Experience the Future of{' '}
-            <span className="gradient-text">AI Assistance</span>
-          </motion.h1>
-
-          {/* Subheading */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="text-lg sm:text-xl text-[#a1a1aa] max-w-2xl mx-auto mb-10"
-          >
-            Amkyaw AI delivers lightning-fast responses with real-time token streaming. 
-            Powered by cutting-edge LLM technology for an unparalleled chat experience.
-          </motion.p>
-
-          {/* CTA Buttons */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center"
-          >
-            <Link href="/chat">
-              <button className="group relative px-8 py-4 bg-[#00f2ff] text-black font-semibold rounded-xl transition-all hover:bg-[#00e0e6] animate-pulse-glow">
-                <span className="flex items-center gap-2">
-                  Get Started
-                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </span>
-              </button>
-            </Link>
-            <Link href="/docs">
-              <button className="px-8 py-4 glass text-white font-semibold rounded-xl hover:bg-white/10 transition-all">
-                View Documentation
-              </button>
-            </Link>
-          </motion.div>
-        </div>
-
-        {/* Features Grid */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6 }}
-          className="mt-20 grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-4xl mx-auto"
-        >
-          {[
-            {
-              icon: Zap,
-              title: 'Real-Time Streaming',
-              description: 'Experience instant responses with token-by-token streaming',
-            },
-            {
-              icon: Brain,
-              title: 'Smart Context',
-              description: 'AI remembers your conversation for better assistance',
-            },
-            {
-              icon: Shield,
-              title: 'Secure & Private',
-              description: 'Your conversations are encrypted and protected',
-            },
-          ].map((feature, index) => (
-            <div
-              key={index}
-              className="glass-card p-6 text-center hover:scale-105 transition-transform cursor-default"
-            >
-              <feature.icon className="w-10 h-10 mx-auto mb-4 text-[#00f2ff]" />
-              <h3 className="font-['Outfit'] font-semibold text-lg text-white mb-2">
-                {feature.title}
-              </h3>
-              <p className="text-sm text-[#a1a1aa]">{feature.description}</p>
+          <div className="glass-panel relative rounded-[2rem] p-6 shadow-glow">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-slate-400">Performance Snapshot</p>
+                <h2 className="mt-1 text-2xl font-semibold text-white">Why it feels fast</h2>
+              </div>
+              <div className="rounded-2xl border border-violet/20 bg-violet/10 p-3 text-violet">
+                <Cpu className="h-5 w-5" />
+              </div>
             </div>
-          ))}
-        </motion.div>
-      </main>
+            <div className="mt-8 space-y-4">
+              {[
+                { label: 'Live token streaming', value: 'Immediate' },
+                { label: 'Context window handling', value: 'Trimmed + stable' },
+                { label: 'Response formatting', value: 'Markdown + code' },
+              ].map((metric) => (
+                <div key={metric.label} className="rounded-2xl border border-white-10 bg-black/20 p-4">
+                  <p className="text-sm text-slate-400">{metric.label}</p>
+                  <p className="mt-2 text-lg font-medium text-white">{metric.value}</p>
+                </div>
+              ))}
+            </div>
+            <div className="mt-8 rounded-2xl border border-cyan/20 bg-cyan/10 p-4 text-sm text-slate-200">
+              <div className="flex items-center gap-2 text-cyan">
+                <ShieldCheck className="h-4 w-4" />
+                Prompt + retrieval guardrails built in
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="grid gap-4 md:grid-cols-3">
+        {VALUE_PROPS.map((item) => {
+          const Icon = item.icon;
+          return (
+            <div key={item.title} className="glass-panel rounded-[2rem] p-6 shadow-glow">
+              <div className="inline-flex rounded-2xl border border-white-10 bg-white-10 p-3 text-cyan">
+                <Icon className="h-5 w-5" />
+              </div>
+              <h3 className="mt-5 text-xl font-semibold text-white">{item.title}</h3>
+              <p className="mt-3 text-sm leading-7 text-slate-300">{item.description}</p>
+            </div>
+          );
+        })}
+      </section>
     </div>
   );
 }

@@ -1,40 +1,82 @@
-import { groq } from '@ai-sdk/groq';
-import { streamText } from 'ai';
+import Groq from 'groq-sdk';
+import { buildConversationWindow, composeSystemPrompt, type ChatMessage } from '@/lib/chat';
+import { retrieveRelevantContext } from '@/lib/rag';
 
-// Use Vercel AI SDK streamText
-export async function POST(req: Request) {
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
+
+export async function POST(request: Request) {
   try {
-    const { messages } = await req.json();
+    const { messages } = (await request.json()) as { messages: ChatMessage[] };
 
-    // System prompt for context management
-    const systemMessage = {
-      role: 'system',
-      content:
-        'You are Amkyaw AI, a helpful and precise assistant. Focus strictly on answering the user\'s core intent with high accuracy. Keep responses concise but informative.',
-    };
+    if (!Array.isArray(messages) || messages.length === 0) {
+      return Response.json({ error: 'Messages are required.' }, { status: 400 });
+    }
 
-    // Get last 15 messages for context management
-    const recentMessages = messages.slice(-15);
-    
-    // Build conversation with system prompt
-    const conversation = [systemMessage, ...recentMessages];
+    if (!process.env.GROQ_API_KEY) {
+      return Response.json({ error: 'Missing GROQ_API_KEY.' }, { status: 500 });
+    }
 
-    // Use Vercel AI SDK streamText with Groq model
-    const result = streamText({
-      model: groq('llama-4-scout-17b-8eq-2025-06-03'),
-      messages: conversation,
-      temperature: 0.5,
+    const groq = new Groq({
+      apiKey: process.env.GROQ_API_KEY,
     });
 
-    return result.toTextStreamResponse();
+    const latestUserMessage = [...messages].reverse().find((message) => message.role === 'user');
+    const retrievedContext = latestUserMessage
+      ? retrieveRelevantContext(latestUserMessage.content)
+      : '';
+
+    const stream = await groq.chat.completions.create({
+      model: 'meta-llama/llama-4-scout-17b-16e-instruct',
+      temperature: 0.65,
+      max_completion_tokens: 1024,
+      stream: true,
+      messages: [
+        {
+          role: 'system',
+          content: composeSystemPrompt(retrievedContext),
+        },
+        ...buildConversationWindow(messages).map((message) => ({
+          role: message.role,
+          content: message.content,
+        })),
+      ],
+    });
+
+    const encoder = new TextEncoder();
+
+    const readableStream = new ReadableStream({
+      async start(controller) {
+        try {
+          for await (const chunk of stream) {
+            const content = chunk.choices[0]?.delta?.content ?? '';
+            if (content) {
+              controller.enqueue(encoder.encode(content));
+            }
+          }
+        } catch (error) {
+          controller.enqueue(
+            encoder.encode(`\n\n> Streaming interrupted: ${error instanceof Error ? error.message : 'Unknown error'}`),
+          );
+        } finally {
+          controller.close();
+        }
+      },
+    });
+
+    return new Response(readableStream, {
+      headers: {
+        'Content-Type': 'text/plain; charset=utf-8',
+        'Cache-Control': 'no-cache, no-transform',
+        Connection: 'keep-alive',
+      },
+    });
   } catch (error) {
-    console.error('Chat API error:', error);
-    return new Response(
-      JSON.stringify({ error: 'Failed to generate response' }),
+    return Response.json(
       {
-        status: 500,
-        headers: { 'Content-Type': 'application/json' },
-      }
+        error: error instanceof Error ? error.message : 'Unexpected server error.',
+      },
+      { status: 500 },
     );
   }
 }
