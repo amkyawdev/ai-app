@@ -1,22 +1,26 @@
 import Link from 'next/link';
-import { cn } from '@/lib/utils';
 
-export function ButtonLink({
-  href,
-  children,
-  className,
-}: {
+interface ButtonLinkProps {
   href: string;
   children: React.ReactNode;
   className?: string;
-}) {
+  variant?: 'primary' | 'secondary';
+}
+
+export function ButtonLink({ 
+  href, 
+  children, 
+  className = '',
+  variant = 'primary' 
+}: ButtonLinkProps) {
   return (
-    <Link
-      href={href}
-      className={cn(
-        'inline-flex items-center justify-center rounded-full border border-cyan-30 bg-white-10 px-5 py-3 text-sm font-medium text-white shadow-glow transition duration-300 hover:-translate-y-0.5 hover:border-cyan-60 hover:bg-white-15',
-        className,
-      )}
+    <Link 
+      href={href} 
+      className={`inline-flex items-center justify-center rounded-full font-medium transition-all duration-300 hover:-translate-y-0.5 ${className} ${
+        variant === 'primary' 
+          ? 'bg-gradient-to-r from-cyan to-cyan/80 text-black hover:shadow-[0_10px_30px_rgba(0,242,255,0.4)]' 
+          : 'bg-white/5 text-white border border-white/10 hover:bg-white/10 hover:border-white/20'
+      }`}
     >
       {children}
     </Link>

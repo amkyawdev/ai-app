@@ -1,249 +1,235 @@
 'use client';
 
-import { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
-import { Loader2, MessageSquarePlus, SendHorizonal } from 'lucide-react';
-import { ChatMessage as MessageBubble } from '@/components/chat/chat-message';
-import { cn } from '@/lib/utils';
+import { useState, useRef, useEffect } from 'react';
+import { Send, Plus, Loader2, Trash2 } from 'lucide-react';
+import { ChatMessage } from './chat-message';
 
-type Role = 'user' | 'assistant';
-
-interface Message {
+type Message = {
   id: string;
-  role: Role;
+  role: 'user' | 'assistant';
   content: string;
-  createdAt: string;
-}
+  timestamp: Date;
+};
 
-interface Thread {
+interface ChatHistory {
   id: string;
   title: string;
-  updatedAt: string;
   messages: Message[];
 }
 
-const STORAGE_KEY = 'amkyaw-ai-threads';
-
-function makeId() {
-  return Math.random().toString(36).slice(2, 10);
-}
-
-function createThread(): Thread {
-  return {
-    id: makeId(),
-    title: 'New conversation',
-    updatedAt: new Date().toISOString(),
-    messages: [
-      {
-        id: makeId(),
-        role: 'assistant',
-        content:
-          'Welcome to **Amkyaw AI**. Ask about Groq, Llama 4 Scout, implementation details, or your own product workflow.',
-        createdAt: new Date().toISOString(),
-      },
-    ],
-  };
-}
-
-export function ChatShell() {
-  const [threads, setThreads] = useState<Thread[]>([]);
-  const [activeThreadId, setActiveThreadId] = useState<string>('');
+export default function ChatShell() {
+  const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
-  const [isStreaming, setIsStreaming] = useState(false);
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [history, setHistory] = useState<ChatHistory[]>([]);
+  const [currentChatId, setCurrentChatId] = useState<string | null>(null);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const raw = window.localStorage.getItem(STORAGE_KEY);
-    if (!raw) {
-      const starter = createThread();
-      setThreads([starter]);
-      setActiveThreadId(starter.id);
-      return;
-    }
-
-    const parsed = JSON.parse(raw) as Thread[];
-    setThreads(parsed);
-    setActiveThreadId(parsed[0]?.id ?? '');
-  }, []);
-
-  useEffect(() => {
-    if (threads.length > 0) {
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(threads));
-    }
-  }, [threads]);
-
-  useEffect(() => {
-    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
-  }, [threads, activeThreadId]);
-
-  const activeThread = useMemo(
-    () => threads.find((thread) => thread.id === activeThreadId) ?? threads[0],
-    [threads, activeThreadId],
-  );
-
-  const updateActiveThread = (updater: (thread: Thread) => Thread) => {
-    setThreads((current) =>
-      current.map((thread) => (thread.id === activeThreadId ? updater(thread) : thread)),
-    );
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const handleNewThread = () => {
-    const thread = createThread();
-    setThreads((current) => [thread, ...current]);
-    setActiveThreadId(thread.id);
-  };
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    if (!input.trim() || !activeThread || isStreaming) return;
+  const sendMessage = async () => {
+    if (!input.trim() || isLoading) return;
 
     const userMessage: Message = {
-      id: makeId(),
+      id: Date.now().toString(),
       role: 'user',
       content: input.trim(),
-      createdAt: new Date().toISOString(),
+      timestamp: new Date(),
     };
 
-    const assistantMessage: Message = {
-      id: makeId(),
-      role: 'assistant',
-      content: '',
-      createdAt: new Date().toISOString(),
-    };
-
-    const pendingMessages = [...activeThread.messages, userMessage, assistantMessage];
-    updateActiveThread((thread) => ({
-      ...thread,
-      title: thread.title === 'New conversation' ? userMessage.content.slice(0, 42) : thread.title,
-      updatedAt: new Date().toISOString(),
-      messages: pendingMessages,
-    }));
+    setMessages(prev => [...prev, userMessage]);
     setInput('');
-    setIsStreaming(true);
+    setIsLoading(true);
 
     try {
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          messages: pendingMessages.map(({ role, content }) => ({ role, content })),
+          messages: [...messages, userMessage].map(m => ({
+            role: m.role,
+            content: m.content,
+          })),
         }),
       });
 
-      if (!response.ok || !response.body) {
-        throw new Error('Failed to start streaming response.');
-      }
+      if (!response.ok) throw new Error('Failed to get response');
 
-      const reader = response.body.getReader();
+      const reader = response.body?.getReader();
+      if (!reader) throw new Error('No reader');
+
       const decoder = new TextDecoder();
-      let accumulated = '';
+      let assistantContent = '';
+      const assistantMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        role: 'assistant',
+        content: '',
+        timestamp: new Date(),
+      };
+
+      setMessages(prev => [...prev, assistantMessage]);
+      setIsLoading(false);
 
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
-        accumulated += decoder.decode(value, { stream: true });
-
-        updateActiveThread((thread) => ({
-          ...thread,
-          updatedAt: new Date().toISOString(),
-          messages: thread.messages.map((message) =>
-            message.id === assistantMessage.id
-              ? { ...message, content: accumulated }
-              : message,
-          ),
-        }));
+        const chunk = decoder.decode(value);
+        assistantContent += chunk;
+        setMessages(prev => 
+          prev.map((m, i) => 
+            m.id === assistantMessage.id 
+              ? { ...m, content: assistantContent } 
+              : m
+          )
+        );
       }
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Streaming failed.';
-      updateActiveThread((thread) => ({
-        ...thread,
-        messages: thread.messages.map((item) =>
-          item.id === assistantMessage.id
-            ? {
-                ...item,
-                content: `⚠️ ${message}\n\nMake sure your **GROQ_API_KEY** is set and the Groq model is available.`,
-              }
-            : item,
-        ),
-      }));
+      console.error('Error:', error);
+      setMessages(prev => [...prev, {
+        id: (Date.now() + 1).toString(),
+        role: 'assistant',
+        content: 'Sorry, I encountered an error. Please try again.',
+        timestamp: new Date(),
+      }]);
     } finally {
-      setIsStreaming(false);
+      setIsLoading(false);
     }
-  }
+  };
 
-  if (!activeThread) {
-    return null;
-  }
+  const newChat = () => {
+    setCurrentChatId(null);
+    setMessages([]);
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  };
 
   return (
-    <div className="grid min-h-[calc(100vh-7rem)] gap-6 lg:grid-cols-[300px_minmax(0,1fr)]">
-      <aside className="rounded-[2rem] border border-white-10 bg-white-5 p-4 shadow-glow backdrop-blur-xl">
-        <button
-          type="button"
-          onClick={handleNewThread}
-          className="mb-4 flex w-full items-center justify-center gap-2 rounded-2xl border border-cyan-30 bg-cyan-10 px-4 py-3 text-sm font-medium text-white transition hover:bg-cyan-20"
-        >
-          <MessageSquarePlus className="h-4 w-4" />
-          New chat
-        </button>
-        <div className="space-y-2">
-          {threads.map((thread) => (
-            <button
-              key={thread.id}
-              type="button"
-              onClick={() => setActiveThreadId(thread.id)}
-              className={cn(
-                'w-full rounded-2xl border px-4 py-3 text-left transition',
-                thread.id === activeThreadId
-                  ? 'border-cyan-30 bg-white-10 text-white'
-                  : 'border-white-10 bg-white-5 text-slate-300 hover:bg-white-10',
-              )}
-            >
-              <p className="truncate text-sm font-medium">{thread.title}</p>
-              <p className="mt-1 truncate text-xs text-slate-400">
-                {thread.messages[thread.messages.length - 1]?.content || 'No messages yet'}
-              </p>
-            </button>
-          ))}
+    <div className="flex h-[calc(100vh-64px)]">
+      {/* Sidebar */}
+      <aside className={`${isSidebarOpen ? 'w-72' : 'w-0'} glass border-r border-white/10 transition-all overflow-hidden`}>
+        <div className="p-4 h-full flex flex-col w-72">
+          <button
+            onClick={newChat}
+            className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-gradient-to-r from-cyan/10 to-violet/10 text-cyan font-medium hover:from-cyan/20 hover:to-violet/20 transition-all"
+          >
+            <Plus size={18} />
+            <span>New Chat</span>
+          </button>
+
+          <div className="mt-6 flex-1 overflow-y-auto space-y-2">
+            {history.length === 0 ? (
+              <p className="text-sm text-zinc-500">No conversations yet</p>
+            ) : (
+              history.map(chat => (
+                <div
+                  key={chat.id}
+                  onClick={() => {
+                    setCurrentChatId(chat.id);
+                    setMessages(chat.messages);
+                  }}
+                  className="flex items-center justify-between p-3 rounded-lg bg-white/5 hover:bg-white/10 cursor-pointer transition-colors"
+                >
+                  <span className="text-sm text-zinc-300 truncate">{chat.title}</span>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setHistory(prev => prev.filter(h => h.id !== chat.id));
+                    }}
+                    className="p-1 hover:bg-white/10 rounded"
+                  >
+                    <Trash2 size={14} className="text-zinc-500" />
+                  </button>
+                </div>
+              ))
+            )}
+          </div>
         </div>
       </aside>
 
-      <section className="flex min-h-[70vh] flex-col rounded-[2rem] border border-white-10 bg-white-5 shadow-glow backdrop-blur-xl">
-        <div className="border-b border-white-10 px-6 py-5">
-          <p className="text-sm text-slate-400">Realtime token streaming</p>
-          <h1 className="text-2xl font-semibold text-white">Chat with Amkyaw AI</h1>
-        </div>
+      {/* Sidebar Toggle */}
+      <button
+        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+        className="absolute left-4 top-20 z-10 p-2 glass rounded-lg hover:bg-white/10"
+      >
+        <svg className={`w-4 h-4 transition-transform ${isSidebarOpen ? '' : 'rotate-180'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+        </svg>
+      </button>
 
-        <div ref={scrollRef} className="flex-1 space-y-6 overflow-y-auto px-6 py-6">
-          {activeThread.messages.map((message) => (
-            <MessageBubble
-              key={message.id}
-              role={message.role}
-              content={message.content || (message.role === 'assistant' ? '...' : '')}
-              createdAt={message.createdAt}
-            />
+      {/* Main Chat Area */}
+      <main className="flex-1 flex flex-col">
+        {/* Messages */}
+        <div className="flex-1 overflow-y-auto p-4 sm:p-6">
+          {messages.length === 0 && (
+            <div className="flex flex-col items-center justify-center h-full text-center">
+              <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-cyan to-violet">
+                <svg className="h-10 w-10 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                </svg>
+              </div>
+              <h2 className="mb-2 text-2xl font-bold text-white">Welcome to Amkyaw AI</h2>
+              <p className="text-zinc-400 max-w-md">
+                Start a conversation with your AI assistant. Ask questions, get help, or simply chat.
+              </p>
+            </div>
+          )}
+
+          {messages.map((message) => (
+            <ChatMessage key={message.id} message={message} />
           ))}
+
+          {isLoading && messages.length > 0 && (
+            <div className="flex items-center gap-3">
+              <Loader2 className="h-5 w-5 animate-spin text-cyan" />
+              <span className="text-sm text-zinc-500">Thinking...</span>
+            </div>
+          )}
+
+          <div ref={messagesEndRef} />
         </div>
 
-        <form onSubmit={handleSubmit} className="border-t border-white-10 p-4 sm:p-6">
-          <div className="flex flex-col gap-3 rounded-[1.75rem] border border-white-10 bg-slate-950-70 p-3 shadow-inner shadow-black/20 sm:flex-row sm:items-end">
-            <textarea
-              value={input}
-              onChange={(event) => setInput(event.target.value)}
-              rows={3}
-              placeholder="Ask about Groq integration, docs, or your own use case..."
-              className="min-h-[92px] flex-1 resize-none bg-transparent px-3 py-2 text-sm text-white outline-none placeholder:text-slate-500"
-            />
-            <button
-              type="submit"
-              disabled={isStreaming}
-              className="inline-flex h-12 items-center justify-center gap-2 rounded-2xl border border-cyan-30 bg-cyan-10 px-5 text-sm font-medium text-white transition hover:bg-cyan-20 disabled:cursor-not-allowed disabled:opacity-60"
-            >
-              {isStreaming ? <Loader2 className="h-4 w-4 animate-spin" /> : <SendHorizonal className="h-4 w-4" />}
-              {isStreaming ? 'Streaming...' : 'Send'}
-            </button>
+        {/* Input */}
+        <div className="border-t border-white/10 p-4">
+          <div className="mx-auto max-w-3xl">
+            <div className="glass-card flex items-end gap-3 p-3">
+              <textarea
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={handleKeyPress}
+                placeholder="Type your message..."
+                className="flex-1 bg-transparent text-white placeholder-zinc-500 resize-none focus:outline-none min-h-[48px] max-h-32"
+                rows={1}
+              />
+              <button
+                onClick={sendMessage}
+                disabled={!input.trim() || isLoading}
+                className={`p-3 rounded-xl transition-all ${
+                  input.trim() && !isLoading
+                    ? 'bg-gradient-to-r from-cyan to-cyan/80 text-black hover:shadow-[0_0_20px_rgba(0,242,255,0.4)]'
+                    : 'bg-white/10 text-zinc-500 cursor-not-allowed'
+                }`}
+              >
+                <Send size={20} />
+              </button>
+            </div>
+            <p className="text-center text-xs text-zinc-600 mt-2">
+              AI can make mistakes. Verify important information.
+            </p>
           </div>
-        </form>
-      </section>
+        </div>
+      </main>
     </div>
   );
 }
